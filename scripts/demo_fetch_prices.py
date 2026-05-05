@@ -88,7 +88,9 @@ def main() -> None:
     print()
     print("=" * 70)
     print(f"  Fetched {len(raw_prices)} raw rows -> {len(prices)} clean rows")
-    print(f"  {len(prices.columns)} tickers, {prices.index.min().date()} -> {prices.index.max().date()}")
+    print(
+        f"  {len(prices.columns)} tickers, {prices.index.min().date()} -> {prices.index.max().date()}"
+    )
     print("=" * 70)
     print()
     print("Last 5 observations:")
@@ -100,7 +102,7 @@ def main() -> None:
     print()
     print("Annualised volatility (%):")
     daily_returns = prices.pct_change().dropna()
-    vol = daily_returns.std() * (252 ** 0.5) * 100
+    vol = daily_returns.std() * (252**0.5) * 100
     print(vol.round(2).sort_values().to_string())
     print()
     print("Sharpe ratio (rf=0, period):")

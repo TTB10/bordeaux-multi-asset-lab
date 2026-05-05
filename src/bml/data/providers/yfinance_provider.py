@@ -55,7 +55,7 @@ class YFinanceProvider(DataProvider):
                 group_by="ticker",
                 threads=True,
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise DataProviderError(f"Yahoo Finance request failed: {exc}") from exc
 
         if raw is None or raw.empty:

@@ -2,6 +2,7 @@
 
 > Active multi-asset portfolio management framework with macro regime detection and AI co-pilot.
 
+[![CI](https://github.com/TTB10/bordeaux-multi-asset-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/TTB10/bordeaux-multi-asset-lab/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -14,9 +15,9 @@ The portfolio runs **live** with a publicly verifiable track record and monthly 
 
 Most retail portfolio tools are static (a backtest run once) or opaque (a black box producing buy/sell signals). BML is built around three principles:
 
-- **Transparent methodology** — every model, signal, and allocation rule is documented and reproducible.
-- **Live track record** — performance is timestamped, public, and out-of-sample.
-- **AI as a co-pilot, not a black box** — large language models assist with research synthesis and reporting, but every investment decision remains rule-based and auditable.
+- **Transparent methodology** - every model, signal, and allocation rule is documented and reproducible.
+- **Live track record** - performance is timestamped, public, and out-of-sample.
+- **AI as a co-pilot, not a black box** - large language models assist with research synthesis and reporting, but every investment decision remains rule-based and auditable.
 
 ## Architecture
 
@@ -43,9 +44,15 @@ git clone https://github.com/TTB10/bordeaux-multi-asset-lab.git
 cd bordeaux-multi-asset-lab
 
 # Install dependencies (uv)
-uv sync
+uv sync --all-extras
 
-# Run the dashboard
+# Run the test suite
+uv run pytest
+
+# Run the demo data fetch
+uv run python scripts/demo_fetch_prices.py
+
+# Run the dashboard (coming soon)
 uv run streamlit run app/main.py
 ```
 
@@ -53,7 +60,9 @@ uv run streamlit run app/main.py
 
 Currently in active development.
 
-- [ ] Data layer (Yahoo Finance, FRED, ECB)
+- [x] Data layer (Yahoo Finance provider)
+- [x] Universe domain models (Asset, Universe, AssetClass, Region)
+- [x] Continuous integration (ruff, mypy, pytest)
 - [ ] Investable universe (~80 UCITS ETFs)
 - [ ] Macro regime engine v1 (rule-based)
 - [ ] Tactical allocation engine
@@ -65,8 +74,8 @@ Currently in active development.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
 
 ## About
 
-Built by [TTB10](https://github.com/TTB10), M1 IREF student at Université de Bordeaux, as a research project on quantitative multi-asset portfolio management.
+Built by [TTB10](https://github.com/TTB10), M1 IREF student at Universite de Bordeaux, as a research project on quantitative multi-asset portfolio management.
