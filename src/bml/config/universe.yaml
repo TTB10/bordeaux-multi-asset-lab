@@ -19,7 +19,7 @@ assets:
   # === EQUITY EM (4) ===
   - {ticker: EIMI.L, isin: IE00BKM4GZ66, name: iShares Core MSCI EM IMI UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0018, issuer: iShares, hedged: false}
   - {ticker: VFEM.L, isin: IE00B3VVMM84, name: Vanguard FTSE Emerging Markets UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0022, issuer: Vanguard, hedged: false}
-  - {ticker: ICHN.L, isin: IE00B02KXK85, name: iShares MSCI China UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0040, issuer: iShares, hedged: false}
+  - {ticker: CNYB.L, isin: IE00BJ5JNY99, name: iShares MSCI China UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0040, issuer: iShares, hedged: false}
   - {ticker: NDIA.L, isin: IE00BZCQB185, name: iShares MSCI India UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0065, issuer: iShares, hedged: false}
 
   # === GOVERNMENT BONDS (8) ===
@@ -46,7 +46,7 @@ assets:
 
   # === COMMODITIES (4) ===
   - {ticker: IGLN.L, isin: IE00B4ND3602, name: iShares Physical Gold ETC, asset_class: gold, region: global, currency: USD, ter: 0.0012, issuer: iShares, hedged: false}
-  - {ticker: SGLN.L, isin: GB00B1VS3W29, name: Invesco Physical Gold ETC, asset_class: gold, region: global, currency: USD, ter: 0.0012, issuer: Invesco, hedged: false}
+  - {ticker: PHAG.L, isin: JE00B1VS3333, name: WisdomTree Physical Silver, asset_class: broad_commodity, region: global, currency: USD, ter: 0.0049, issuer: WisdomTree, hedged: false}
   - {ticker: ICOM.L, isin: IE00BD6FTQ80, name: iShares Diversified Commodity Swap UCITS, asset_class: broad_commodity, region: global, currency: USD, ter: 0.0019, issuer: iShares, hedged: false}
   - {ticker: AIGE.L, isin: IE00B6R52143, name: WisdomTree Energy, asset_class: broad_commodity, region: global, currency: USD, ter: 0.0049, issuer: WisdomTree, hedged: false}
 
