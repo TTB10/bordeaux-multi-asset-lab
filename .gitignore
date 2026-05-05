@@ -1,0 +1,58 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Data (on ne commit pas les datasets, juste le code)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.duckdb
+*.db
+*.parquet
+*.csv
+!tests/**/*.csv
+
+# Secrets et config locales
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets.yaml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb_meta
+
+# Logs
+*.log
+logs/
+
+# Streamlit
+.streamlit/secrets.toml
