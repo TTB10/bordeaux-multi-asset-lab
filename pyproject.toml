@@ -1,4 +1,4 @@
-﻿[project]
+[project]
 name = "bordeaux-multi-asset-lab"
 version = "0.1.0"
 description = "Active multi-asset portfolio management framework with macro regime detection and AI co-pilot."

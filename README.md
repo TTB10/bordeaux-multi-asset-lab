@@ -1,4 +1,4 @@
-﻿# Bordeaux Multi-Asset Lab
+# Bordeaux Multi-Asset Lab
 
 > Active multi-asset portfolio management framework with macro regime detection and AI co-pilot.
 
