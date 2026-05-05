@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class AssetClass(str, Enum):
+class AssetClass(StrEnum):
     """High-level asset class taxonomy used across the framework."""
 
     EQUITY_DM = "equity_developed_markets"
@@ -21,7 +21,7 @@ class AssetClass(str, Enum):
     CASH = "cash"
 
 
-class Region(str, Enum):
+class Region(StrEnum):
     """Geographic region of the underlying exposure."""
 
     GLOBAL = "global"
