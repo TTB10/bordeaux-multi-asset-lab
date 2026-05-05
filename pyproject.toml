@@ -70,6 +70,7 @@ dev = [
     "pre-commit>=3.7",
     "ipykernel>=6.29",
     "jupyter>=1.0",
+    "types-pyyaml>=6.0.12.20260408",
 ]
 
 [project.urls]

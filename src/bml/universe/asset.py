@@ -19,6 +19,10 @@ class AssetClass(StrEnum):
     COMMODITY = "broad_commodity"
     REAL_ESTATE = "real_estate"
     CASH = "cash"
+    LISTED_PE = "listed_private_equity"
+    INFRASTRUCTURE = "infrastructure"
+    MANAGED_FUTURES = "managed_futures"
+    CONVERTIBLE = "convertible_bond"
 
 
 class Region(StrEnum):
@@ -37,9 +41,6 @@ class Region(StrEnum):
 class Asset(BaseModel):
     """An investable instrument in the BML universe.
 
-    Assets are the atomic building blocks of any portfolio. They are immutable
-    once created and uniquely identified by their ISIN.
-
     Attributes:
         ticker: Exchange ticker (e.g. "IWDA.AS").
         isin: International Securities Identification Number (unique).
@@ -48,6 +49,8 @@ class Asset(BaseModel):
         region: Geographic exposure.
         currency: Base currency (ISO 4217).
         ter: Total Expense Ratio in decimal form (e.g. 0.0020 for 0.20%).
+        issuer: Asset manager issuing the fund (iShares, Vanguard, ...).
+        hedged: True if the share class is currency-hedged to the base ccy.
         inception_date: Optional ISO date of fund inception.
     """
 
@@ -60,6 +63,8 @@ class Asset(BaseModel):
     region: Region
     currency: str = Field(min_length=3, max_length=3, pattern=r"^[A-Z]{3}$")
     ter: float = Field(ge=0.0, le=0.05)
+    issuer: str | None = None
+    hedged: bool = False
     inception_date: str | None = None
 
     def __str__(self) -> str:

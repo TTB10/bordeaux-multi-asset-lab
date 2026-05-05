@@ -1,0 +1,73 @@
+# Bordeaux Multi-Asset Lab - Investable Universe (~49 UCITS ETFs)
+# Tickers reference Yahoo Finance listings; some may need adjustment over time.
+assets:
+  # === EQUITY DM REGIONAL (6) ===
+  - {ticker: CSPX.L, isin: IE00B5BMR087, name: iShares Core S&P 500 UCITS, asset_class: equity_developed_markets, region: usa, currency: USD, ter: 0.0007, issuer: iShares, hedged: false}
+  - {ticker: IWDA.AS, isin: IE00B4L5Y983, name: iShares Core MSCI World UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0020, issuer: iShares, hedged: false}
+  - {ticker: VWRL.AS, isin: IE00B3RBWM25, name: Vanguard FTSE All-World UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0022, issuer: Vanguard, hedged: false}
+  - {ticker: VEUR.AS, isin: IE00B945VV12, name: Vanguard FTSE Developed Europe UCITS, asset_class: equity_developed_markets, region: europe, currency: EUR, ter: 0.0010, issuer: Vanguard, hedged: false}
+  - {ticker: ISF.L, isin: IE00B53HP851, name: iShares Core FTSE 100 UCITS, asset_class: equity_developed_markets, region: uk, currency: GBP, ter: 0.0007, issuer: iShares, hedged: false}
+  - {ticker: IJPN.L, isin: IE00B02KXH56, name: iShares MSCI Japan UCITS, asset_class: equity_developed_markets, region: japan, currency: USD, ter: 0.0048, issuer: iShares, hedged: false}
+
+  # === EQUITY DM STYLE (5) ===
+  - {ticker: IWVL.L, isin: IE00BP3QZB59, name: iShares Edge MSCI World Value Factor UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0030, issuer: iShares, hedged: false}
+  - {ticker: IWQU.L, isin: IE00BP3QZ601, name: iShares Edge MSCI World Quality Factor UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0030, issuer: iShares, hedged: false}
+  - {ticker: MVOL.L, isin: IE00B8FHGS14, name: iShares Edge MSCI World Min Volatility UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0030, issuer: iShares, hedged: false}
+  - {ticker: IWMO.L, isin: IE00BP3QZ825, name: iShares Edge MSCI World Momentum Factor UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0030, issuer: iShares, hedged: false}
+  - {ticker: WSML.L, isin: IE00BF4RFH31, name: iShares MSCI World Small Cap UCITS, asset_class: equity_developed_markets, region: global, currency: USD, ter: 0.0035, issuer: iShares, hedged: false}
+
+  # === EQUITY EM (4) ===
+  - {ticker: EIMI.L, isin: IE00BKM4GZ66, name: iShares Core MSCI EM IMI UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0018, issuer: iShares, hedged: false}
+  - {ticker: VFEM.L, isin: IE00B3VVMM84, name: Vanguard FTSE Emerging Markets UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0022, issuer: Vanguard, hedged: false}
+  - {ticker: ICHN.L, isin: IE00B02KXK85, name: iShares MSCI China UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0040, issuer: iShares, hedged: false}
+  - {ticker: NDIA.L, isin: IE00BZCQB185, name: iShares MSCI India UCITS, asset_class: equity_emerging_markets, region: emerging, currency: USD, ter: 0.0065, issuer: iShares, hedged: false}
+
+  # === GOVERNMENT BONDS (8) ===
+  - {ticker: IB01.L, isin: IE00BGSF1X88, name: iShares Treasury Bond 0-1yr UCITS, asset_class: government_bond, region: usa, currency: USD, ter: 0.0007, issuer: iShares, hedged: false}
+  - {ticker: IDTM.L, isin: IE00B3VWN518, name: iShares Treasury Bond 7-10yr UCITS, asset_class: government_bond, region: usa, currency: USD, ter: 0.0007, issuer: iShares, hedged: false}
+  - {ticker: IDTL.L, isin: IE00BSKRJZ44, name: iShares Treasury Bond 20+yr UCITS, asset_class: government_bond, region: usa, currency: USD, ter: 0.0007, issuer: iShares, hedged: false}
+  - {ticker: IBGS.AS, isin: IE00B14X4Q57, name: iShares Euro Govt Bond 1-3yr UCITS, asset_class: government_bond, region: eurozone, currency: EUR, ter: 0.0009, issuer: iShares, hedged: false}
+  - {ticker: IEGA.AS, isin: IE00B4WXJJ64, name: iShares Core Euro Govt Bond UCITS, asset_class: government_bond, region: eurozone, currency: EUR, ter: 0.0009, issuer: iShares, hedged: false}
+  - {ticker: IBGL.AS, isin: IE00B1FZS913, name: iShares Euro Govt Bond 15-30yr UCITS, asset_class: government_bond, region: eurozone, currency: EUR, ter: 0.0020, issuer: iShares, hedged: false}
+  - {ticker: ITPS.L, isin: IE00B1FZSC47, name: iShares USD TIPS UCITS, asset_class: government_bond, region: usa, currency: USD, ter: 0.0010, issuer: iShares, hedged: false}
+  - {ticker: IGLT.L, isin: IE00B1FZSB30, name: iShares Core UK Gilts UCITS, asset_class: government_bond, region: uk, currency: GBP, ter: 0.0007, issuer: iShares, hedged: false}
+
+  # === CREDIT IG (5) ===
+  - {ticker: IEAC.L, isin: IE00B3F81R35, name: iShares Core Euro Corporate Bond UCITS, asset_class: credit_investment_grade, region: eurozone, currency: EUR, ter: 0.0020, issuer: iShares, hedged: false}
+  - {ticker: LQDE.L, isin: IE0032895942, name: iShares USD Corporate Bond UCITS, asset_class: credit_investment_grade, region: usa, currency: USD, ter: 0.0020, issuer: iShares, hedged: false}
+  - {ticker: VDCP.L, isin: IE00BZ163G84, name: Vanguard EUR Corporate Bond UCITS, asset_class: credit_investment_grade, region: eurozone, currency: EUR, ter: 0.0009, issuer: Vanguard, hedged: false}
+  - {ticker: VDCA.L, isin: IE00BZ163K21, name: Vanguard USD Corporate Bond UCITS, asset_class: credit_investment_grade, region: usa, currency: USD, ter: 0.0009, issuer: Vanguard, hedged: false}
+  - {ticker: CRPS.L, isin: IE00BD3RZ526, name: SPDR Bloomberg Global Corporate Bond UCITS, asset_class: credit_investment_grade, region: global, currency: USD, ter: 0.0020, issuer: SPDR, hedged: false}
+
+  # === CREDIT HY (3) ===
+  - {ticker: IHYG.L, isin: IE00B66F4759, name: iShares Euro High Yield Corporate Bond UCITS, asset_class: credit_high_yield, region: europe, currency: EUR, ter: 0.0050, issuer: iShares, hedged: false}
+  - {ticker: IHYU.L, isin: IE00B4PY7Y77, name: iShares USD High Yield Corporate Bond UCITS, asset_class: credit_high_yield, region: usa, currency: USD, ter: 0.0050, issuer: iShares, hedged: false}
+  - {ticker: SEMB.L, isin: IE00B2NPKV68, name: iShares JPM USD EM Bond UCITS, asset_class: credit_high_yield, region: emerging, currency: USD, ter: 0.0045, issuer: iShares, hedged: false}
+
+  # === COMMODITIES (4) ===
+  - {ticker: IGLN.L, isin: IE00B4ND3602, name: iShares Physical Gold ETC, asset_class: gold, region: global, currency: USD, ter: 0.0012, issuer: iShares, hedged: false}
+  - {ticker: SGLN.L, isin: GB00B1VS3W29, name: Invesco Physical Gold ETC, asset_class: gold, region: global, currency: USD, ter: 0.0012, issuer: Invesco, hedged: false}
+  - {ticker: ICOM.L, isin: IE00BD6FTQ80, name: iShares Diversified Commodity Swap UCITS, asset_class: broad_commodity, region: global, currency: USD, ter: 0.0019, issuer: iShares, hedged: false}
+  - {ticker: AIGE.L, isin: IE00B6R52143, name: WisdomTree Energy, asset_class: broad_commodity, region: global, currency: USD, ter: 0.0049, issuer: WisdomTree, hedged: false}
+
+  # === REITs (3) ===
+  - {ticker: IUSP.L, isin: IE00B1FZSF77, name: iShares US Property Yield UCITS, asset_class: real_estate, region: usa, currency: USD, ter: 0.0040, issuer: iShares, hedged: false}
+  - {ticker: IPRP.L, isin: IE00B0M63284, name: iShares European Property Yield UCITS, asset_class: real_estate, region: europe, currency: EUR, ter: 0.0040, issuer: iShares, hedged: false}
+  - {ticker: IWDP.L, isin: IE00B1FZS350, name: iShares Developed Markets Property Yield UCITS, asset_class: real_estate, region: global, currency: USD, ter: 0.0059, issuer: iShares, hedged: false}
+
+  # === CASH / MONEY MARKET (3) ===
+  - {ticker: ERNE.L, isin: IE00BCRY6557, name: iShares Euro Ultrashort Bond UCITS, asset_class: cash, region: eurozone, currency: EUR, ter: 0.0009, issuer: iShares, hedged: false}
+  - {ticker: ERNS.L, isin: IE00BCRY6003, name: iShares USD Ultrashort Bond UCITS, asset_class: cash, region: usa, currency: USD, ter: 0.0009, issuer: iShares, hedged: false}
+  - {ticker: XEON.DE, isin: LU0290358497, name: Xtrackers EUR Overnight Rate Swap UCITS, asset_class: cash, region: eurozone, currency: EUR, ter: 0.0010, issuer: Xtrackers, hedged: false}
+
+  # === SECTORAL US (4) ===
+  - {ticker: IUIT.L, isin: IE00B3WJKG14, name: iShares S&P 500 Information Technology UCITS, asset_class: equity_developed_markets, region: usa, currency: USD, ter: 0.0015, issuer: iShares, hedged: false}
+  - {ticker: IUHC.L, isin: IE00B43HR379, name: iShares S&P 500 Health Care UCITS, asset_class: equity_developed_markets, region: usa, currency: USD, ter: 0.0015, issuer: iShares, hedged: false}
+  - {ticker: IUFS.L, isin: IE00B4JNQZ49, name: iShares S&P 500 Financials UCITS, asset_class: equity_developed_markets, region: usa, currency: USD, ter: 0.0015, issuer: iShares, hedged: false}
+  - {ticker: IUES.L, isin: IE00B42NKQ00, name: iShares S&P 500 Energy UCITS, asset_class: equity_developed_markets, region: usa, currency: USD, ter: 0.0015, issuer: iShares, hedged: false}
+
+  # === ALTERNATIVES (4) ===
+  - {ticker: DBMF.L, isin: IE000Z2DT9F4, name: iMGP DBi Managed Futures Fund UCITS, asset_class: managed_futures, region: global, currency: USD, ter: 0.0085, issuer: iMGP, hedged: false}
+  - {ticker: IPRV.L, isin: IE00B1TXHL60, name: iShares Listed Private Equity UCITS, asset_class: listed_private_equity, region: global, currency: USD, ter: 0.0075, issuer: iShares, hedged: false}
+  - {ticker: INFR.L, isin: IE00B1FZS467, name: iShares Global Infrastructure UCITS, asset_class: infrastructure, region: global, currency: USD, ter: 0.0065, issuer: iShares, hedged: false}
+  - {ticker: GCVB.L, isin: IE00BNH72088, name: SPDR Refinitiv Global Convertible Bond UCITS, asset_class: convertible_bond, region: global, currency: USD, ter: 0.0050, issuer: SPDR, hedged: false}
