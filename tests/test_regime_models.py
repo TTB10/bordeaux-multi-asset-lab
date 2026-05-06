@@ -75,7 +75,7 @@ class TestIndicatorReading:
     def test_reading_is_frozen(self) -> None:
         r = self._build()
         with pytest.raises(ValidationError):
-            r.confidence = 0.5  # type: ignore[misc]
+            r.confidence = 0.5
 
     def test_confidence_must_be_in_unit_interval(self) -> None:
         with pytest.raises(ValidationError):

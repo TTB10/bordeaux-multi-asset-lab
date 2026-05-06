@@ -37,7 +37,7 @@ class TestAsset:
     def test_asset_is_frozen(self) -> None:
         a = make_asset()
         with pytest.raises(ValidationError):
-            a.ticker = "OTHER"  # type: ignore[misc]
+            a.ticker = "OTHER"
 
     def test_invalid_isin_raises(self) -> None:
         with pytest.raises(ValidationError):

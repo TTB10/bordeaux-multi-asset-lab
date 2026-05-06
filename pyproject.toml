@@ -26,7 +26,6 @@ dependencies = [
     "pyarrow>=15.0",
     # Market & macro data
     "yfinance>=0.2.40",
-    "pandas-datareader>=0.10",
     "requests>=2.32",
     # Quant & stats
     "scipy>=1.13",
@@ -47,6 +46,7 @@ dependencies = [
     "loguru>=0.7",
     "python-dotenv>=1.0",
     "tqdm>=4.66",
+    "fredapi>=0.5.2",
 ]
 
 [project.optional-dependencies]
