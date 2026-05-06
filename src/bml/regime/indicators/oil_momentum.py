@@ -1,8 +1,13 @@
-"""Brent crude oil 6-month momentum indicator.
+"""WTI crude oil 6-month momentum indicator.
 
-DCOILBRENTEU is a daily FRED series for Brent crude oil prices.
-A sustained positive 6-month momentum signals upcoming inflation pressure
-through energy pass-through into headline CPI and producer prices.
+DCOILWTICO is a daily FRED series for West Texas Intermediate crude oil
+prices, the US benchmark. A sustained positive 6-month momentum signals
+upcoming inflation pressure through energy pass-through into headline
+CPI and producer prices.
+
+Note: we originally targeted Brent (DCOILBRENTEU) but that FRED endpoint
+proved unreliable (recurring HTTP 500). WTI is in fact more relevant for
+US inflation analysis. See docs/known_issues.md for context.
 """
 
 from __future__ import annotations
@@ -19,9 +24,9 @@ from bml.regime.models import IndicatorReading
 
 
 class OilMomentumIndicator(MacroIndicator):
-    """Brent oil 6-month momentum (FRED series DCOILBRENTEU)."""
+    """WTI crude oil 6-month momentum (FRED series DCOILWTICO)."""
 
-    SERIES_ID = "DCOILBRENTEU"
+    SERIES_ID = "DCOILWTICO"
     LOOKBACK_YEARS = 5
     HISTORY_YEARS = 30
     MOMENTUM_DAYS = 126  # ~6 months of trading days
@@ -31,7 +36,7 @@ class OilMomentumIndicator(MacroIndicator):
 
     @property
     def name(self) -> str:
-        return "brent_oil_6m_momentum"
+        return "wti_oil_6m_momentum"
 
     @property
     def dimension(self) -> MacroDimension:

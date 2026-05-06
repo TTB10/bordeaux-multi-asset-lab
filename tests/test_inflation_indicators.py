@@ -104,11 +104,11 @@ class TestOilMomentum:
         levels = 70.0 * np.exp(np.cumsum(log_returns))
         # Force the last point so that 126-day momentum = last_6m_pct percent
         levels[-1] = levels[-127] * (1 + last_6m_pct / 100.0)
-        return pd.Series(levels, index=dates, name="DCOILBRENTEU")
+        return pd.Series(levels, index=dates, name="DCOILWTICO")
 
     def test_name_and_dimension(self) -> None:
         ind = OilMomentumIndicator(_build_provider(self._series()))
-        assert ind.name == "brent_oil_6m_momentum"
+        assert ind.name == "wti_oil_6m_momentum"
         assert ind.dimension == MacroDimension.INFLATION
 
     def test_strong_positive_momentum_returns_up(self) -> None:

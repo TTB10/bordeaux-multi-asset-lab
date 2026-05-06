@@ -5,12 +5,14 @@ environment into one of four regimes based on the cross of growth and
 inflation directions.
 """
 
-from bml.regime.detector import RegimeDetector
+from bml.regime.aggregators import DimensionAggregator, WeightedVoteAggregator
+from bml.regime.detector import RegimeDetector, RuleBasedRegimeDetector
 from bml.regime.enums import Direction, MacroDimension, Regime
 from bml.regime.indicators import MacroIndicator
 from bml.regime.models import DimensionalSignal, IndicatorReading, RegimeSignal
 
 __all__ = [
+    "DimensionAggregator",
     "DimensionalSignal",
     "Direction",
     "IndicatorReading",
@@ -19,4 +21,6 @@ __all__ = [
     "Regime",
     "RegimeDetector",
     "RegimeSignal",
+    "RuleBasedRegimeDetector",
+    "WeightedVoteAggregator",
 ]
