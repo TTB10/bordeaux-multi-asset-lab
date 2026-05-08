@@ -56,3 +56,7 @@ logs/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Portfolio state files (mutable, generated)
+data/portfolios/
+
