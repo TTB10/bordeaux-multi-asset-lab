@@ -1,81 +1,115 @@
 # Bordeaux Multi-Asset Lab
 
-> Active multi-asset portfolio management framework with macro regime detection and AI co-pilot.
+> Système systématique d''allocation tactique multi-actifs guidé par le régime macroéconomique
 
 [![CI](https://github.com/TTB10/bordeaux-multi-asset-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/TTB10/bordeaux-multi-asset-lab/actions/workflows/ci.yml)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: ruff](https://img.shields.io/badge/code_style-ruff-blue.svg)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Streamlit Cloud](https://img.shields.io/badge/dashboard-live-red.svg)](https://ttb10-bml.streamlit.app)
 
-**Bordeaux Multi-Asset Lab (BML)** is an open-source research project that simulates the workflow of a small active asset manager. It combines a quantitative macro regime detection engine, a tactical asset allocation framework, a fund/ETF selection layer, and an AI co-pilot to assist with research and investor reporting.
+**[Accéder au dashboard live](https://ttb10-bml.streamlit.app)** · **[White paper](docs/white_paper.md)** · **[Documentation technique](docs/technical_doc.md)**
 
-The portfolio runs **live** with a publicly verifiable track record and monthly investor letters published on LinkedIn.
+![Dashboard preview](docs/screenshots/dashboard_preview.png)
 
-## Why this project
+---
 
-Most retail portfolio tools are static (a backtest run once) or opaque (a black box producing buy/sell signals). BML is built around three principles:
+## Le problème
 
-- **Transparent methodology** - every model, signal, and allocation rule is documented and reproducible.
-- **Live track record** - performance is timestamped, public, and out-of-sample.
-- **AI as a co-pilot, not a black box** - large language models assist with research synthesis and reporting, but every investment decision remains rule-based and auditable.
+L''allocation d''actifs détermine 80 à 90 % de la performance d''un portefeuille à long terme ([Brinson, Hood & Beebower, 1986](https://www.cfainstitute.org/en/research/financial-analysts-journal/1986/determinants-of-portfolio-performance)). Pourtant, l''allocation tactique systématique reste largement inaccessible au gérant indépendant ou à l''investisseur particulier sophistiqué : robo-advisors statiques, mandats discrétionnaires opaques, ou fonds quanti institutionnels hors de portée.
+
+## L''approche
+
+Bordeaux Multi-Asset Lab propose un framework systématique transparent qui :
+
+- **Détecte le régime macroéconomique courant** parmi 5 états (Goldilocks, Reflation, Stagflation, Récession désinflationniste, Incertain) à partir de 6 indicateurs publics extraits de la base FRED
+- **Dérive une allocation cible** modérément tiltée par rapport à un benchmark 60/40 enrichi multi-actifs
+- **Régularise par confidence** : aucun pari extrême sur un signal faible. L''allocation finale ne s''écarte de la référence neutre que dans la mesure où le signal est statistiquement crédible
+- **Sélectionne les fonds concrets** dans un univers de 49 ETFs UCITS via un scoring composite Sharpe / drawdown / frais
+
+Toutes les données utilisées sont publiques. Tout le code est open-source. Chaque décision d''allocation peut être tracée jusqu''aux indicateurs macroéconomiques sous-jacents.
+
+## Quick start
+
+Prérequis : Python 3.12+, [uv](https://docs.astral.sh/uv/), une [clé API FRED gratuite](https://fred.stlouisfed.org/docs/api/api_key.html).
+
+```bash
+# Cloner et installer
+git clone https://github.com/TTB10/bordeaux-multi-asset-lab.git
+cd bordeaux-multi-asset-lab
+uv sync --all-extras
+
+# Configurer la clé FRED
+echo "FRED_API_KEY=your_key_here" > .env
+
+# Vérifier l''installation
+uv run pytest
+
+# Lancer le dashboard
+uv run streamlit run app/streamlit_app.py
+```
+
+Le dashboard sera accessible sur `http://localhost:8501`.
 
 ## Architecture
 
-The project is organized as a Python package (`bml`) with eight domain modules:
-src/bml/
-├── data/         # Data ingestion (market, macro, fund universe)
-├── universe/     # Investable universe modeling
-├── regime/       # Macro regime detection (rule-based, HMM, clustering)
-├── allocation/   # Tactical asset allocation strategies
-├── selection/    # Fund and ETF scoring and selection
-├── risk/         # VaR, ES, stress tests, risk attribution
-├── attribution/  # Performance attribution (Brinson-Fachler)
-├── portfolio/    # Portfolio state, transactions, rebalancing
-├── ai/           # LLM-based research co-pilot
-└── reporting/    # Monthly letters and PDF generation
+Sept modules indépendants avec pattern Stratégie. Le pipeline exécute ces modules en séquence linéaire :
+| Module | Responsabilité |
+|---|---|
+| `data` | Acquisition des prix Yahoo et séries FRED, avec retry-and-backoff |
+| `universe` | Chargement de l''univers d''investissement depuis configuration YAML |
+| `regime` | 6 indicateurs -> classification parmi 5 régimes + confidence |
+| `allocation` | Mapping régime -> allocation cible, avec smoothing par confidence |
+| `selection` | Sélection top-N par classe d''actifs via scoring composite |
+| `portfolio` | État temporel du portefeuille avec persistance JSON |
+| `risk` | 7 métriques empiriques + comparaison benchmark |
 
-A Streamlit application (`app/`) exposes the framework through an interactive dashboard, and a research write-up (`docs/whitepaper/`) documents the methodology.
+Pour les détails, voir la [documentation technique](docs/technical_doc.md).
 
-## Getting started
+## Qualité du code
 
-```bash
-# Clone the repo
-git clone https://github.com/TTB10/bordeaux-multi-asset-lab.git
-cd bordeaux-multi-asset-lab
+- **161 tests unitaires** passants, **couverture 90 %**
+- **mypy strict mode** sur l''ensemble du code source
+- **ruff** linting + formatting automatique
+- **GitHub Actions CI** sur chaque push
 
-# Install dependencies (uv)
-uv sync --all-extras
+## Documentation
 
-# Run the test suite
-uv run pytest
+- **[White paper](docs/white_paper.md)** — Méthodologie complète, revue de littérature, résultats empiriques (~30 pages)
+- **[Documentation technique](docs/technical_doc.md)** — Référence du code, classes, exemples d''usage (~50 pages)
+- **[Dashboard live](https://ttb10-bml.streamlit.app)** — Accès interactif au framework, mis à jour automatiquement
 
-# Run the demo data fetch
-uv run python scripts/demo_fetch_prices.py
+## Discipline de publication
 
-# Run the dashboard (coming soon)
-uv run streamlit run app/main.py
-```
+À partir du 5 juillet 2026, une lettre d''investissement mensuelle est publiée le 5 de chaque mois, présentant le régime détecté, l''allocation cible, le portefeuille concret avec ses transactions de rebalancement, et la performance écoulée. Cette régularité construit un track record vérifiable et impose une discipline de revue continue du framework.
 
-## Project status
+## Roadmap
 
-Currently in active development.
+**V1.1 (juin 2026)** — Polish UX, lettre mensuelle automatisée, corrections cosmétiques mineures.
 
-- [x] Data layer (Yahoo Finance provider)
-- [x] Universe domain models (Asset, Universe, AssetClass, Region)
-- [x] Continuous integration (ruff, mypy, pytest)
-- [ ] Investable universe (~80 UCITS ETFs)
-- [ ] Macro regime engine v1 (rule-based)
-- [ ] Tactical allocation engine
-- [ ] Fund selection scoring
-- [ ] Risk engine
-- [ ] Performance attribution
-- [ ] AI co-pilot
-- [ ] First live monthly letter
+**V2 (T3 2026)** — Backtest pluriannuel point-in-time sur 15-20 ans, modélisation des coûts de transaction, élargissement géographique des indicateurs (ECB, Chine).
 
-## License
+**V3 (T4 2026)** — Hidden Markov Models pour la détection de régime, overlay de tail risk hedging.
 
-MIT - see [LICENSE](LICENSE).
+## Limites assumées
 
-## About
+- **Validation préliminaire** : la fenêtre actuelle de 3 ans glissants est insuffisante pour valider statistiquement la valeur ajoutée du timing macro. Backtest pluriannuel en cours de développement.
+- **Indicateurs US uniquement** : pas d''indicateurs ECB, asiatiques ou émergents. Limite documentée dans le white paper.
+- **Pas de coûts de transaction modélisés** en V1. À intégrer en V2.
+- **Pas de gestion fiscale** différenciée selon enveloppe (PEA, AV, CTO).
 
-Built by [TTB10](https://github.com/TTB10), M1 IREF student at Universite de Bordeaux, as a research project on quantitative multi-asset portfolio management.
+Voir la section 6.2 du white paper pour la liste exhaustive.
+
+## Auteur
+
+**TTB10** — étudiant M1 IREF, Université de Bordeaux.
+
+Ce projet a été développé dans le cadre d''une démarche de candidature à un stage M2 en gestion d''actifs systématique multi-stratégies.
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE)
+
+## Citation
+
+Si vous utilisez ce framework ou vous en inspirez, merci de citer :
