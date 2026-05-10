@@ -1,9 +1,4 @@
-"""Page : analyse détaillée du risque.
-
-Affiche les 7 métriques empiriques avec comparaison vs benchmark, la courbe
-NAV, l'underwater chart (drawdown), la distribution des rendements, et le
-Sharpe glissant.
-"""
+"""Page : analyse détaillée du risque."""
 
 from __future__ import annotations
 
@@ -18,12 +13,18 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from components.data_loader import format_date_fr, load_pipeline_state
-
-st.set_page_config(
-    page_title="Risque — BML",
-    page_icon="📈",
-    layout="wide",
+from components.styling import (
+    COLOR_BENCHMARK,
+    COLOR_PORTFOLIO,
+    DANGER,
+    SUCCESS,
+    WARNING,
+    apply_pro_layout,
+    inject_custom_css,
 )
+
+st.set_page_config(page_title="Risque - BML", page_icon="📈", layout="wide")
+inject_custom_css()
 
 state = load_pipeline_state()
 pf_metrics = state.portfolio_metrics
@@ -34,15 +35,11 @@ bench_levels = state.benchmark_levels_series
 pf_returns = pf_levels.pct_change().dropna()
 bench_returns = bench_levels.pct_change().dropna()
 
-# ---------- Header ----------
-
 st.title("Analyse du risque")
 st.caption(
     f"Métriques empiriques sur 3 ans glissants au {format_date_fr(state.today)}, "
     f"basées sur {len(pf_returns)} observations quotidiennes."
 )
-
-# ---------- Top 4 metric cards (vs benchmark) ----------
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -76,7 +73,7 @@ with col4:
         st.metric(
             "Beta vs 60/40",
             f"{pf_metrics.beta:+.2f}",
-            help="Sensibilité aux mouvements du benchmark. <1 = défensif, >1 = offensif.",
+            help="Sensibilité aux mouvements du benchmark. <1 = défensif.",
         )
     else:
         st.metric("Beta vs 60/40", "n/a")
@@ -117,7 +114,8 @@ fig_nav.add_trace(
         x=pf_levels.index,
         y=pf_levels.values,
         name="Portefeuille",
-        line=dict(color="#3b82f6", width=2),
+        line=dict(color=COLOR_PORTFOLIO, width=2.5),
+        hovertemplate="<b>Portefeuille</b><br>%{x|%d %b %Y}<br>NAV : %{y:.2f}<extra></extra>",
     )
 )
 fig_nav.add_trace(
@@ -125,25 +123,17 @@ fig_nav.add_trace(
         x=bench_levels.index,
         y=bench_levels.values,
         name="Benchmark 60/40",
-        line=dict(color="#9ca3af", width=2, dash="dot"),
+        line=dict(color=COLOR_BENCHMARK, width=2, dash="dot"),
+        hovertemplate="<b>Benchmark 60/40</b><br>%{x|%d %b %Y}<br>NAV : %{y:.2f}<extra></extra>",
     )
 )
-fig_nav.update_layout(
-    yaxis_title="NAV (base 100)",
-    xaxis_title=None,
-    height=400,
-    margin=dict(t=20, b=20, l=40, r=20),
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    plot_bgcolor="white",
-    hovermode="x unified",
-)
-fig_nav.update_xaxes(showgrid=False)
-fig_nav.update_yaxes(showgrid=True, gridcolor="#f3f4f6")
+fig_nav.update_layout(yaxis_title="NAV (base 100)", hovermode="x unified")
+apply_pro_layout(fig_nav, height=400)
 st.plotly_chart(fig_nav, use_container_width=True)
 
 st.divider()
 
-# ---------- Underwater chart (drawdown) ----------
+# ---------- Underwater chart ----------
 
 st.subheader("Drawdown timeline (underwater chart)")
 
@@ -162,8 +152,9 @@ fig_dd.add_trace(
         y=drawdown_pf.values,
         name="Portefeuille",
         fill="tozeroy",
-        fillcolor="rgba(239, 68, 68, 0.15)",
-        line=dict(color="#ef4444", width=1.5),
+        fillcolor="rgba(239, 68, 68, 0.18)",
+        line=dict(color=DANGER, width=2),
+        hovertemplate="<b>Portefeuille</b><br>%{x|%d %b %Y}<br>DD : %{y:.2f}%<extra></extra>",
     )
 )
 fig_dd.add_trace(
@@ -171,20 +162,12 @@ fig_dd.add_trace(
         x=drawdown_bench.index,
         y=drawdown_bench.values,
         name="Benchmark 60/40",
-        line=dict(color="#9ca3af", width=1, dash="dot"),
+        line=dict(color=COLOR_BENCHMARK, width=1.5, dash="dot"),
+        hovertemplate="<b>Benchmark 60/40</b><br>%{x|%d %b %Y}<br>DD : %{y:.2f}%<extra></extra>",
     )
 )
-fig_dd.update_layout(
-    yaxis_title="Drawdown (%)",
-    xaxis_title=None,
-    height=350,
-    margin=dict(t=20, b=20, l=40, r=20),
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    plot_bgcolor="white",
-    hovermode="x unified",
-)
-fig_dd.update_xaxes(showgrid=False)
-fig_dd.update_yaxes(showgrid=True, gridcolor="#f3f4f6")
+fig_dd.update_layout(yaxis_title="Drawdown (%)", hovermode="x unified")
+apply_pro_layout(fig_dd, height=380)
 st.plotly_chart(fig_dd, use_container_width=True)
 st.caption(
     "L'underwater chart montre la chute en pourcentage par rapport au plus haut historique. "
@@ -193,7 +176,7 @@ st.caption(
 
 st.divider()
 
-# ---------- Returns distribution + Rolling Sharpe ----------
+# ---------- Distribution + Rolling Sharpe ----------
 
 col_dist, col_rolling = st.columns(2)
 
@@ -207,33 +190,31 @@ with col_dist:
         go.Histogram(
             x=pf_returns_pct,
             nbinsx=50,
-            marker_color="#3b82f6",
+            marker_color=COLOR_PORTFOLIO,
             opacity=0.75,
             name="Rendements",
+            hovertemplate="Rendement : %{x:.2f}%<br>Fréquence : %{y}<extra></extra>",
         )
     )
     fig_hist.add_vline(
         x=pf_metrics.var_95 * 100,
-        line=dict(color="#f59e0b", width=2, dash="dash"),
+        line=dict(color=WARNING, width=2, dash="dash"),
         annotation_text=f"VaR 95% ({pf_metrics.var_95*100:+.2f}%)",
         annotation_position="top",
+        annotation_font=dict(color=WARNING, size=11),
     )
     fig_hist.add_vline(
         x=pf_metrics.cvar_95 * 100,
-        line=dict(color="#ef4444", width=2, dash="dash"),
+        line=dict(color=DANGER, width=2, dash="dash"),
         annotation_text=f"CVaR 95% ({pf_metrics.cvar_95*100:+.2f}%)",
         annotation_position="bottom",
+        annotation_font=dict(color=DANGER, size=11),
     )
     fig_hist.update_layout(
         xaxis_title="Rendement quotidien (%)",
         yaxis_title="Fréquence",
-        height=400,
-        margin=dict(t=40, b=40, l=40, r=20),
-        plot_bgcolor="white",
-        showlegend=False,
     )
-    fig_hist.update_xaxes(showgrid=False)
-    fig_hist.update_yaxes(showgrid=True, gridcolor="#f3f4f6")
+    apply_pro_layout(fig_hist, height=400, show_legend=False)
     st.plotly_chart(fig_hist, use_container_width=True)
     st.caption(
         "VaR 95% = 5e percentile (perte journalière dépassée 5% du temps). "
@@ -243,7 +224,7 @@ with col_dist:
 with col_rolling:
     st.subheader("Sharpe glissant (fenêtre 63 jours)")
 
-    window = 63  # ~3 months trading days
+    window = 63
     risk_free_daily = 0.025 / 252.0
 
     rolling_mean = pf_returns.rolling(window).mean()
@@ -260,7 +241,8 @@ with col_rolling:
             x=rolling_sharpe.index,
             y=rolling_sharpe.values,
             name="Portefeuille",
-            line=dict(color="#3b82f6", width=2),
+            line=dict(color=COLOR_PORTFOLIO, width=2.5),
+            hovertemplate="<b>Portefeuille</b><br>%{x|%d %b %Y}<br>Sharpe : %{y:.2f}<extra></extra>",
         )
     )
     fig_roll.add_trace(
@@ -268,21 +250,20 @@ with col_rolling:
             x=rolling_sharpe_b.index,
             y=rolling_sharpe_b.values,
             name="Benchmark 60/40",
-            line=dict(color="#9ca3af", width=2, dash="dot"),
+            line=dict(color=COLOR_BENCHMARK, width=2, dash="dot"),
+            hovertemplate="<b>Benchmark 60/40</b><br>%{x|%d %b %Y}<br>Sharpe : %{y:.2f}<extra></extra>",
         )
     )
-    fig_roll.add_hline(y=0, line=dict(color="#cccccc", width=1))
-    fig_roll.add_hline(y=1, line=dict(color="#10b981", width=1, dash="dot"))
-    fig_roll.update_layout(
-        yaxis_title="Sharpe",
-        xaxis_title=None,
-        height=400,
-        margin=dict(t=20, b=20, l=40, r=20),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        plot_bgcolor="white",
+    fig_roll.add_hline(y=0, line=dict(color="#cbd5e1", width=1))
+    fig_roll.add_hline(
+        y=1,
+        line=dict(color=SUCCESS, width=1.5, dash="dot"),
+        annotation_text="Seuil de qualité",
+        annotation_position="bottom right",
+        annotation_font=dict(color=SUCCESS, size=10),
     )
-    fig_roll.update_xaxes(showgrid=False)
-    fig_roll.update_yaxes(showgrid=True, gridcolor="#f3f4f6")
+    fig_roll.update_layout(yaxis_title="Sharpe", hovermode="x unified")
+    apply_pro_layout(fig_roll, height=400)
     st.plotly_chart(fig_roll, use_container_width=True)
     st.caption(
         "Sharpe sur fenêtre glissante de 63 jours (~3 mois). "
@@ -291,16 +272,14 @@ with col_rolling:
 
 st.divider()
 
-# ---------- Methodology notes ----------
-
 with st.expander("Notes méthodologiques sur le calcul des métriques"):
     st.markdown(
         """
 - **Rendement annualisé** : composition annuelle des rendements quotidiens, base 252 jours ouvrés.
 - **Volatilité annualisée** : écart-type des rendements quotidiens × √252.
-- **Sharpe ratio** : (rendement annualisé − taux sans risque) / volatilité annualisée. Taux sans risque par défaut : 2.5 % (≈ EUR overnight).
+- **Sharpe ratio** : (rendement annualisé − taux sans risque) / volatilité annualisée. Taux sans risque par défaut : 2.5% (≈ EUR overnight).
 - **Max drawdown** : pire chute peak-to-trough sur la période.
-- **VaR 95%** : 5e percentile empirique des rendements quotidiens (non-paramétrique, sans hypothèse de normalité).
+- **VaR 95%** : 5e percentile empirique des rendements quotidiens (non-paramétrique).
 - **CVaR 95%** : moyenne des rendements en dessous de la VaR (Expected Shortfall, plus robuste pour le tail risk).
 - **Beta** : `cov(rendements_pf, rendements_bench) / var(rendements_bench)`.
 
@@ -310,9 +289,9 @@ Toutes les métriques sont calculées sur la même fenêtre glissante de 3 ans, 
 
 st.divider()
 st.markdown(
-    "<div style='text-align: center; color: #888; font-size: 14px;'>"
+    "<div style='text-align: center; color: #94a3b8; font-size: 13px; padding: 1rem 0;'>"
     "Méthodologie complète dans le "
-    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/white_paper.md'>white paper</a> "
+    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/white_paper.md' style='color: #475569;'>white paper</a> "
     "(section 4.5)."
     "</div>",
     unsafe_allow_html=True,

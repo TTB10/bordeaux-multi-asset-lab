@@ -1,7 +1,4 @@
-"""Page : décomposition de l'allocation tactique.
-
-Visualise le mécanisme de smoothing : allocation finale = neutre + confidence × (tilt_régime - neutre).
-"""
+"""Page : décomposition de l'allocation tactique."""
 
 from __future__ import annotations
 
@@ -16,18 +13,19 @@ import streamlit as st
 
 from bml.allocation.tilts import DEFAULT_REGIME_TILTS, NEUTRAL_TILT
 from components.data_loader import format_date_fr, load_pipeline_state, regime_color
-
-st.set_page_config(
-    page_title="Allocation — BML",
-    page_icon="⚖️",
-    layout="wide",
+from components.styling import (
+    NEUTRAL,
+    PRIMARY,
+    apply_pro_layout,
+    inject_custom_css,
 )
+
+st.set_page_config(page_title="Allocation - BML", page_icon="⚖️", layout="wide")
+inject_custom_css()
 
 state = load_pipeline_state()
 signal = state.regime_signal
 target = state.target_allocation
-
-# ---------- Header ----------
 
 st.title("Allocation tactique")
 st.caption(f"Allocation cible au {format_date_fr(state.today)}")
@@ -51,7 +49,6 @@ with col3:
         st.metric(
             "Smoothing",
             f"{(1 - signal.confidence):.0%} neutre + {signal.confidence:.0%} régime",
-            help="Mélange convexe entre l'allocation neutre et le tilt cible du régime.",
         )
 
 st.divider()
@@ -60,7 +57,6 @@ st.divider()
 
 st.subheader("Décomposition de l'allocation")
 
-# Determine which tilt to display alongside neutral
 if regime_value != "uncertain" and signal.regime in DEFAULT_REGIME_TILTS:
     regime_tilt = DEFAULT_REGIME_TILTS[signal.regime]
     show_regime_column = True
@@ -84,7 +80,9 @@ fig.add_trace(
         name="Neutre 60/40",
         x=class_labels,
         y=neutre_values,
-        marker_color="#9ca3af",
+        marker_color=NEUTRAL,
+        marker_line_width=0,
+        hovertemplate="<b>%{x}</b><br>Neutre : %{y:.1f}%<extra></extra>",
     )
 )
 if show_regime_column:
@@ -94,6 +92,8 @@ if show_regime_column:
             x=class_labels,
             y=regime_values,
             marker_color=regime_color(regime_value),
+            marker_line_width=0,
+            hovertemplate="<b>%{x}</b><br>Cible régime : %{y:.1f}%<extra></extra>",
         )
     )
 fig.add_trace(
@@ -101,18 +101,14 @@ fig.add_trace(
         name="Allocation finale (smoothée)",
         x=class_labels,
         y=final_values,
-        marker_color="#3b82f6",
+        marker_color=PRIMARY,
+        marker_line_width=0,
+        hovertemplate="<b>%{x}</b><br>Finale : %{y:.1f}%<extra></extra>",
     )
 )
-fig.update_layout(
-    barmode="group",
-    yaxis_title="Poids (%)",
-    height=450,
-    margin=dict(t=20, b=80, l=40, r=20),
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    plot_bgcolor="white",
-)
+fig.update_layout(barmode="group", yaxis_title="Poids (%)")
 fig.update_xaxes(tickangle=-30)
+apply_pro_layout(fig, height=460)
 st.plotly_chart(fig, use_container_width=True)
 
 # ---------- Deltas table ----------
@@ -138,11 +134,11 @@ df_deltas = pd.DataFrame(display_data)
 
 def color_delta(val: str) -> str:
     if val in ("+0.00%", "-0.00%"):
-        return "color: #9ca3af;"
+        return "color: #94a3b8;"
     if val.startswith("+"):
-        return "color: #10b981; font-weight: bold;"
+        return "color: #10b981; font-weight: 700;"
     if val.startswith("-"):
-        return "color: #ef4444; font-weight: bold;"
+        return "color: #ef4444; font-weight: 700;"
     return ""
 
 
@@ -150,8 +146,6 @@ styled = df_deltas.style.map(color_delta, subset=["Écart"])
 st.dataframe(styled, hide_index=True, use_container_width=True)
 
 st.divider()
-
-# ---------- Smoothing explanation ----------
 
 st.subheader("Mécanisme de smoothing par confidence")
 
@@ -170,19 +164,19 @@ L'allocation finale est calculée par interpolation linéaire :
 
 Cette formule garantit trois propriétés :
 
-- **Stabilité aux signaux faibles** : si la confidence tend vers 0, l'allocation reste alignée sur le neutre. Le système refuse d'engager du capital sans conviction.
-- **Linéarité** : un changement progressif de la confidence produit un changement progressif de l'allocation, sans ruptures.
-- **Préservation de la sommabilité** : si le neutre et le tilt somment chacun à 100 %, l'allocation finale somme aussi à 100 %.
+- **Stabilité aux signaux faibles** : si la confidence tend vers 0, l'allocation reste alignée sur le neutre.
+- **Linéarité** : changement progressif de la confidence implique changement progressif de l'allocation.
+- **Préservation de la sommabilité** : neutre + tilt cible somment à 100%, donc allocation finale somme à 100%.
 
-**Au {format_date_fr(state.today)}**, la confidence sur le régime **{regime_label}** est de **{signal.confidence:.0%}**, ce qui place l'allocation finale à **{signal.confidence:.0%}** du chemin entre le neutre et le tilt cible.
+**Au {format_date_fr(state.today)}**, la confidence sur le régime **{regime_label}** est de **{signal.confidence:.0%}**, plaçant l'allocation finale à **{signal.confidence:.0%}** du chemin entre le neutre et le tilt cible.
         """
     )
 
 st.divider()
 st.markdown(
-    "<div style='text-align: center; color: #888; font-size: 14px;'>"
+    "<div style='text-align: center; color: #94a3b8; font-size: 13px; padding: 1rem 0;'>"
     "Méthodologie détaillée dans le "
-    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/white_paper.md'>white paper</a> "
+    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/white_paper.md' style='color: #475569;'>white paper</a> "
     "(section 4.3)."
     "</div>",
     unsafe_allow_html=True,

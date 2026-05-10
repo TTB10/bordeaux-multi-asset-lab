@@ -1,8 +1,4 @@
-"""Page : composition détaillée du portefeuille.
-
-Affiche les 15 positions concrètes, un treemap par classe d'actifs,
-et une synthèse par bucket.
-"""
+"""Page : composition détaillée du portefeuille."""
 
 from __future__ import annotations
 
@@ -20,22 +16,16 @@ from components.data_loader import (
     format_date_fr,
     load_pipeline_state,
 )
+from components.styling import apply_pro_layout, inject_custom_css
 
-st.set_page_config(
-    page_title="Portefeuille — BML",
-    page_icon="💼",
-    layout="wide",
-)
+st.set_page_config(page_title="Portefeuille - BML", page_icon="💼", layout="wide")
+inject_custom_css()
 
 state = load_pipeline_state()
 ps = state.portfolio_state
 
-# ---------- Header ----------
-
 st.title("Portefeuille")
 st.caption(f"Composition au {format_date_fr(state.today)}")
-
-# ---------- Top metrics ----------
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -73,22 +63,27 @@ for pos in ps.positions:
 
 df_pos = pd.DataFrame(position_data)
 
+treemap_palette = [
+    "#1e3a8a", "#3b82f6", "#0ea5e9", "#06b6d4",
+    "#10b981", "#f59e0b", "#f97316", "#8b5cf6",
+    "#ec4899",
+]
+
 fig = px.treemap(
     df_pos,
     path=[px.Constant("Portefeuille"), "Classe", "Ticker"],
     values="Valeur",
     color="Classe",
-    color_discrete_sequence=px.colors.qualitative.Set3,
+    color_discrete_sequence=treemap_palette,
     hover_data={"Nom": True, "Valeur": ":,.0f"},
 )
 fig.update_traces(
     textinfo="label+percent parent",
     textfont_size=13,
+    marker=dict(line=dict(color="#ffffff", width=2)),
 )
-fig.update_layout(
-    height=500,
-    margin=dict(t=10, b=10, l=10, r=10),
-)
+apply_pro_layout(fig, height=520, show_legend=False, grid=False)
+fig.update_layout(margin=dict(t=10, b=10, l=10, r=10))
 st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
@@ -157,9 +152,9 @@ st.dataframe(df_buckets, hide_index=True, use_container_width=True)
 
 st.divider()
 st.markdown(
-    "<div style='text-align: center; color: #888; font-size: 14px;'>"
+    "<div style='text-align: center; color: #94a3b8; font-size: 13px; padding: 1rem 0;'>"
     "Le portefeuille est rebalancé mensuellement. Voir la "
-    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/technical_doc.md'>documentation technique</a> "
+    "<a href='https://github.com/TTB10/bordeaux-multi-asset-lab/blob/main/docs/technical_doc.md' style='color: #475569;'>documentation technique</a> "
     "pour le workflow opérationnel."
     "</div>",
     unsafe_allow_html=True,
