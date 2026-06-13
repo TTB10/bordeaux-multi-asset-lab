@@ -1,0 +1,14 @@
+{
+  "number": 1,
+  "month_label": "Juillet 2026",
+  "publication_date": "2026-07-05",
+  "tagline": "Régime Incertain : la patience comme stratégie",
+  "regime": "Uncertain",
+  "regime_confidence": 0.06,
+  "performance_3y_cumulative": 0.2584,
+  "performance_3y_benchmark": 0.2137,
+  "sharpe_3y": 3.26,
+  "volatility_3y": 0.0715,
+  "max_drawdown_3y": -0.0548,
+  "key_message": "Le framework reste en allocation neutre 60/40 face à l'incertitude inflationniste : pas de pari directionnel tant que la dimension Inflation ne se clarifie pas."
+}
