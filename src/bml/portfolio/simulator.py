@@ -267,3 +267,57 @@ class PortfolioSimulator:
         if valid.empty:
             return None
         return float(valid.iloc[-1])
+
+
+    @classmethod
+    def load_or_initialize(
+        cls,
+        target: "Portfolio",
+        prices: pd.DataFrame,
+        capital: float,
+        as_of: date,
+        persist_path: str | None = None,
+    ) -> PortfolioState:
+        """Load existing portfolio state from disk, or initialize a fresh one."""
+        from bml.portfolio.persistence import load_portfolio_state, save_portfolio_state
+
+        existing_state = load_portfolio_state(persist_path)
+        if existing_state is not None:
+            current_prices = cls._extract_current_prices(
+                existing_state, prices, as_of
+            )
+            return existing_state.revalue(current_prices, as_of=as_of)
+
+        new_state = cls.initialize(
+            target=target,
+            prices=prices,
+            capital=capital,
+            as_of=as_of,
+        )
+        save_portfolio_state(new_state, persist_path)
+        return new_state
+
+    @staticmethod
+    def _extract_current_prices(
+        state: PortfolioState,
+        prices: pd.DataFrame,
+        as_of: date,
+    ) -> dict[str, float]:
+        """Extract the most recent price for each ticker held in the portfolio."""
+        result = {}
+        as_of_ts = pd.Timestamp(as_of)
+
+        for pos in state.positions:
+            ticker = pos.asset.ticker
+            if ticker not in prices.columns:
+                continue
+
+            series = prices[ticker].loc[:as_of_ts].dropna()
+            if len(series) == 0:
+                continue
+
+            last_price = float(series.iloc[-1])
+            if last_price > 0:
+                result[ticker] = last_price
+
+        return result

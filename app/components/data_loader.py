@@ -128,7 +128,7 @@ def load_pipeline_state() -> PipelineState:
     )
 
     # 5. Portfolio initialization
-    portfolio_state = PortfolioSimulator.initialize(
+    portfolio_state = PortfolioSimulator.load_or_initialize(
         target=portfolio,
         prices=price_result.prices,
         capital=INITIAL_CAPITAL,
