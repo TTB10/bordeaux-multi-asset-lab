@@ -79,10 +79,6 @@ Pour les détails, voir la [documentation technique](docs/technical_doc.md).
 - **[Documentation technique](docs/technical_doc.md)** — Référence du code, classes, exemples d''usage (~50 pages)
 - **[Dashboard live](https://ttb10-bml.streamlit.app)** — Accès interactif au framework, mis à jour automatiquement
 
-## Discipline de publication
-
-À partir du 5 juillet 2026, une lettre d''investissement mensuelle est publiée le 5 de chaque mois, présentant le régime détecté, l''allocation cible, le portefeuille concret avec ses transactions de rebalancement, et la performance écoulée. Cette régularité construit un track record vérifiable et impose une discipline de revue continue du framework.
-
 ## Roadmap
 
 **V1.1 (juin 2026)** — Polish UX, lettre mensuelle automatisée, corrections cosmétiques mineures.
@@ -102,14 +98,10 @@ Voir la section 6.2 du white paper pour la liste exhaustive.
 
 ## Auteur
 
-**TTB10** — étudiant M1 IREF, Université de Bordeaux.
+**Thomas Llasera** — étudiant Master IREF, Université de Bordeaux.
 
 Ce projet a été développé dans le cadre d''une démarche de candidature à un stage M2 en gestion d''actifs systématique multi-stratégies.
 
 ## Licence
 
 MIT — voir [LICENSE](LICENSE)
-
-## Citation
-
-Si vous utilisez ce framework ou vous en inspirez, merci de citer :
